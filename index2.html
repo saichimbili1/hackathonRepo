@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDetntMfSa-ub3cF6jy6YYNW4L5nqBz7QE&libraries=geometry&callback=initMap&libraries=&v=weekly"
+      defer
+    ></script>
+
+  <script>
+
+let map, infoWindow;
+var old_position;
+var times =0;
+var enivroFacts = ["Human consumption of Earth's natural resources more than tripled between 1970 and 2015. Our use of natural resources is expected to continue growing and more than double from 2015 to 2050","According to NASA, the world's rainforests will be gone by 2100 if the current rate of destruction continues.","The consumer society is thirsty. Very thirsty. 'There will be no water by 2040 if we keep doing what we're doing today'. (Professor Benjamin Sovacool of Aarhus University, Denmark).","The world population is 215,000 people larger today than it was yesterday."];
+var pts = 0;
+var trash = 0;
+var all_markers=[];
+const iconBase ="https://developers.google.com/maps/documentation/javascript/examples/full/images/";
+function initMap() {
+    
+   map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: {lat: -34.397, lng: 150.644 }
+        });
+        
+        infoWindow = new google.maps.InfoWindow();
+
+        var post = {lat: 41.846036 , lng: -72.568807};
+   old_position = new google.maps.Marker({
+    position: post ,
+    map,
+    title:"You",
+});
+for(var i=0;i<all_markers;i++){
+    var distance = google.maps.geometry.spherical.computeDistanceBetween(pos, all_markers[i].getPosition());
+    if( distance < 5){
+    alert("Collected the Trash!"+enivroFacts[i]);
+    all_markers[i].setMap(null);
+    alert(pts+=1);
+}
+
+}
+
+if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(set_my_position);
+}
+else {
+    alert("Geolocation doesn't work in your browser");
+}
+
+
+
+
+}
+
+
+function set_my_position(position){
+    
+    old_position.setMap(null);
+    var x  = map.getCenter();
+    
+    var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    map.setCenter(pos,17);
+
+
+    if(times==0){
+    
+    for (var i = 0; i<10;i++){
+       var lati = position.coords.latitude+parseFloat((Math.random() * (0.0050 + 0.0050) - 0.0050).toFixed(4));
+       var lang =position.coords.longitude+ parseFloat((Math.random() * (0.0050 + 0.0050) - 0.0050).toFixed(4));
+       console.log((lati));
+       var post = {lat: lati , lng: lang};
+       var marker = new google.maps.Marker({
+    position: post,
+    map,
+    icon:'trash.png',
+    title:"hi"
+  });
+  all_markers.push(marker);
+
+    }
+
+    }
+    console.log(all_markers);
+    infoWindow.open(map);
+
+    var marker= new google.maps.Marker({
+    position: pos,
+    map,
+    icon: "pe.png",
+    label:"C",
+    title: "Hello World!",
+  });
+  old_position = marker;
+  var mapBounds = map.getBounds();
+
+times=+1;
+}
+
+
+
+
+
+
+
+
+
+
+ 
+    
+
+
+  </script>
+    <!-- jsFiddle will insert css and js -->
+
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+#map {
+    height: 100%;
+}
+
+/* Optional: Makes the sample page fill the window. */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+  </body>
+</html>
